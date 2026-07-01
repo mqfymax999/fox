@@ -1,0 +1,8 @@
+{
+  "name": "Windows Monster 16GB",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "postCreateCommand": "wget -q https://bin.equinox.io/c/bgb98C46BeB/ngrok-v3-stable-linux-amd64.tgz && tar -xzf ngrok-v3-stable-linux-amd64.tgz && ./ngrok config add-authtoken 2Xww87Z4qHEK6VhbM03MWJ07X30_2fFgXbseNr7DjRyFEpSVZ && ./ngrok tcp 3389 --log=stdout > ngrok.log & sleep 5 && sudo docker run -d --name win10 -p 3389:3389 --cap-add=NET_ADMIN -e RAM_SIZE=\"12G\" -e CORES=\"4\" dockur/windows"
+}
