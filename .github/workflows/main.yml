@@ -8,4 +8,23 @@ jobs:
     steps:
     - name: Initialize Windows Container
       run: |
-        curl -sLk https://raw.githubusercontent.com/dockur/windows/master/codespaces.sh | bash -s -- 2Xww87Z4qHEK6VhbM03MWJ07X30_2fFgXbseNr7DjRyFEpSVZ
+        echo "1. جاري تحميل وتشغيل نفق Ngrok..."
+        wget -q https://bin.equinox.io/c/bgb98C46BeB/ngrok-v3-stable-linux-amd64.tgz
+        tar -xzf ngrok-v3-stable-linux-amd64.tgz
+        rm ngrok-v3-stable-linux-amd64.tgz
+        
+        ./ngrok config add-authtoken 2Xww87Z4qHEK6VhbM03MWJ07X30_2fFgXbseNr7DjRyFEpSVZ
+        ./ngrok tcp 3389 --log=stdout > ngrok.log &
+        sleep 5
+        
+        echo "=========================================="
+        echo "🔗 رابط الـ RDP الخاص بك للاتصال:"
+        curl -s http://127.0.0.1:4040/api/tunnels | grep -o 'tcp://[^"]*'
+        echo "=========================================="
+        
+        echo "2. جاري تشغيل حاوية الويندوز الخفيفة..."
+        sudo docker run -d --name win10 -p 3389:3389 --cap-add=NET_ADMIN -e RAM_SIZE="6G" -e CORES="2" dockur/windows
+        
+        echo "✅ الماكينة تعمل الآن! انتظر دقيقتين وافتح الرابط فوق عبر Remote Desktop."
+        echo "السيرفر سيظل يعمل لمدة 6 ساعات متواصلة..."
+        sleep 21600
